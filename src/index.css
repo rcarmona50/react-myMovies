@@ -39,6 +39,7 @@ body {
   padding: 0 3.2rem;
   background-color: var(--color-primary);
   border-radius: 0.9rem;
+  overflow: auto;
 }
 
 .main {
@@ -47,6 +48,7 @@ body {
   display: flex;
   gap: 2.4rem;
   justify-content: center;
+  overflow: auto;
 }
 
 .box {
@@ -56,6 +58,7 @@ body {
   border-radius: 0.9rem;
   overflow: scroll;
   position: relative;
+  overflow: auto;
 }
 
 .loader {
@@ -138,7 +141,7 @@ body {
 .list {
   list-style: none;
   padding: 0.8rem 0;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .list-watched {
