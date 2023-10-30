@@ -1,5 +1,6 @@
+// Importing required hooks from React
 import { useEffect, useState } from "react";
-
+// Sample movie data for demonstration
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -46,13 +47,15 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
-
+// Helper function to calculate the average of an array
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+// OMDb API key
 const KEY = "e9571e9e";
 
 export default function App() {
+  // State management for search query, movies, watched movies, etc.
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
@@ -60,6 +63,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
+  // Effect hook to fetch movies from OMDb API when query changes
   useEffect(
     function () {
       async function fetchMovies() {
@@ -82,6 +86,11 @@ export default function App() {
         } finally {
           setIsLoading(false);
         }
+      }
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
       }
       fetchMovies();
     },
@@ -117,10 +126,12 @@ export default function App() {
   );
 }
 
+// Loading  component
 function Loadder() {
   return <p className="loader">Loading...</p>;
 }
 
+// Error message component
 function ErrorMessage({ message }) {
   return (
     <p className="error">
@@ -137,7 +148,7 @@ function Logo() {
   return (
     <div className="logo">
       <span role="img"> 🎬</span>
-      <h1>myMovies</h1>
+      <h1>My Movie List</h1>
     </div>
   );
 }
