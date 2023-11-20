@@ -53,6 +53,34 @@ export default function MovieDetails({
     [selectedId]
   );
 
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+
+      return function () {
+        document.title = "My Movie List";
+      };
+    },
+    [title]
+  );
+
   return (
     <div className="details">
       <header>
