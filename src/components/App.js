@@ -12,18 +12,20 @@ import Search from "./Search";
 import NumResults from "./NumResults";
 import Logo from "./Logo";
 import Navbar from "./Navbar";
+import { useMovies } from "../useMovies";
 // OMDb API key
-const KEY = "e9571e9e";
 
 export default function App() {
   // State management for search query, movies, watched movies, etc.
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-  const [isLoading, setIsLoading] = useState([]);
-  const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
+  const { movies, isLoading, error } = useMovies(query);
+
+  const [watched, setWatched] = useState(function () {
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (selectedId ? null : id));
   }
@@ -34,43 +36,16 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
-  }
 
-  // Effect hook to fetch movies from OMDb API when query changes
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
+  }
   useEffect(
     function () {
-      const controller = new AbortController();
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError("");
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal }
-          );
-
-          if (!res.ok) throw new Error("Something is messed up.");
-
-          const data = await res.json();
-          if (data.Response === "False") throw new Error("Movie not found");
-
-          setMovies(data.Search);
-        } catch (err) {
-          console.log(err.message);
-          setError(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      fetchMovies();
+      localStorage.setItem("watched", JSON.stringify(watched));
     },
-    [query]
+    [watched]
   );
+  // Effect hook to fetch movies from OMDb API when query changes
 
   return (
     <>
